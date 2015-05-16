@@ -17,17 +17,12 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:foreground="@drawable/header_shadow">
             <fragment
                 android:name="org.yccheok.toolbar_experiment.MainActivityFragment"
                 tools:layout="@layout/fragment_main" android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-
-            <View
-                android:id="@+id/toolbar_dropshadow"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:background="@drawable/toolbar_dropshadow" />
         </FrameLayout>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
