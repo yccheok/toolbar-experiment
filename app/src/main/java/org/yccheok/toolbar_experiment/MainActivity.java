@@ -1,5 +1,8 @@
 package org.yccheok.toolbar_experiment;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -10,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AutoCompleteTextView;
 
 
@@ -18,6 +22,47 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private AutoCompleteTextView jStockAutoCompleteTextView;
+
+    private void animateHamburgerToArrow() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
+        anim.addListener(new ValueAnimator.AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+                MainActivity.this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                actionBarDrawerToggle.onDrawerSlide(drawerLayout, slideOffset);
+            }
+        });
+        anim.setInterpolator(new DecelerateInterpolator());
+        // You can change this duration to more closely match that of the default animation.
+        anim.setDuration(300);
+        anim.start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        actionBarDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.util.Log.i("CHEOK", "click!");
+            }
+        });
     }
 
 
@@ -64,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            animateHamburgerToArrow();
             return true;
         } else if (id == R.id.action_search) {
             // Merely clear off previous content, and focus and the EditText.
