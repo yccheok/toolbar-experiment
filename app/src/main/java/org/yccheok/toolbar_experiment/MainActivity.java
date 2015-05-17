@@ -1,15 +1,23 @@
 package org.yccheok.toolbar_experiment;
 
-import android.os.Build;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private AutoCompleteTextView jStockAutoCompleteTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +26,13 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.drawerLayout = (DrawerLayout)this.findViewById(R.id.drawer_layout);
+        this.actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                toolbar, R.string.app_name, R.string.app_name);
+
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
     }
 
 
@@ -25,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+
+        View actionView = MenuItemCompat.getActionView(searchMenuItem);
+        this.jStockAutoCompleteTextView = (AutoCompleteTextView)actionView.findViewById(R.id.search);
+
         return true;
     }
 
@@ -38,8 +59,25 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_search) {
+            // Merely clear off previous content, and focus and the EditText.
+            jStockAutoCompleteTextView.setText("");
+            jStockAutoCompleteTextView.requestFocus();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 }
