@@ -22,11 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private AutoCompleteTextView jStockAutoCompleteTextView;
+    private volatile boolean arrowVisible = false;
 
-    private void animateHamburgerToArrow() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-        ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
+    private void animateArrowToHamburger() {
+        ValueAnimator anim = ValueAnimator.ofFloat(1f, 0f);
         anim.addListener(new ValueAnimator.AnimatorListener() {
 
             @Override
@@ -36,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-                MainActivity.this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                arrowVisible = false;
             }
 
             @Override
@@ -55,7 +54,47 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float slideOffset = (Float) valueAnimator.getAnimatedValue();
-                actionBarDrawerToggle.onDrawerSlide(drawerLayout, slideOffset);
+                actionBarDrawerToggle.onDrawerSlide(null, slideOffset);
+            }
+        });
+        anim.setInterpolator(new DecelerateInterpolator());
+        // You can change this duration to more closely match that of the default animation.
+        anim.setDuration(300);
+        anim.start();
+    }
+
+    private void animateHamburgerToArrow() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
+        anim.addListener(new ValueAnimator.AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                arrowVisible = true;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                actionBarDrawerToggle.onDrawerSlide(null, slideOffset);
             }
         });
         anim.setInterpolator(new DecelerateInterpolator());
@@ -79,10 +118,18 @@ public class MainActivity extends AppCompatActivity {
         // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
-        actionBarDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.util.Log.i("CHEOK", "click!");
+                if (arrowVisible) {
+                    animateArrowToHamburger();
+                    return;
+                }
+
+                if (drawerLayout.isDrawerOpen(findViewById(R.id.fragment_drawer)))
+                    drawerLayout.closeDrawer(findViewById(R.id.fragment_drawer));
+                else
+                    drawerLayout.openDrawer(findViewById(R.id.fragment_drawer));
             }
         });
     }
@@ -120,9 +167,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_search) {
             // Merely clear off previous content, and focus and the EditText.
-            jStockAutoCompleteTextView.setText("");
-            jStockAutoCompleteTextView.requestFocus();
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
