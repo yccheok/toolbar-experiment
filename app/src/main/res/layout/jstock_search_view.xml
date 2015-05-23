@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_plate"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <view class="org.yccheok.jstock.gui.JStockSearchView$JStockAutoCompleteTextView"
+        android:id="@+id/search_src_text"
+        android:layout_height="36dip"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:minWidth="@dimen/abc_search_view_text_min_width"
+        android:layout_gravity="bottom"
+        android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
+        android:paddingRight="@dimen/abc_dropdownitem_text_padding_right"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:background="@null"
+        android:inputType="text|textAutoComplete|textNoSuggestions"
+        android:imeOptions="actionSearch"
+        android:dropDownHeight="wrap_content"
+        android:dropDownAnchor="@id/search_edit_frame"
+        android:dropDownVerticalOffset="0dip"
+        android:dropDownHorizontalOffset="0dip" />
+
+    <ImageView
+        android:id="@+id/search_close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingStart="8dip"
+        android:paddingEnd="8dip"
+        android:layout_gravity="center_vertical"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:focusable="true"
+        android:contentDescription="searchview_description_clear" />
+
+</LinearLayout>

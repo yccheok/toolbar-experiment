@@ -2,4 +2,6 @@
     <string name="app_name">toolbar-experiment</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="abc_searchview_description_clear">Clear query</string>
 </resources>

@@ -6,15 +6,7 @@
         android:title="Search me"
         android:icon="@drawable/ic_add_white_24dp"
         app:showAsAction="always|collapseActionView"
-        app:actionLayout="@layout/collapsible_searchtext" />
-
-    <!--
-    <item android:id="@+id/action_search"
-        android:title="Search me"
-        android:icon="@drawable/ic_add_white_24dp"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
-    -->
+        app:actionViewClass="org.yccheok.jstock.gui.JStockSearchView" />
 
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
