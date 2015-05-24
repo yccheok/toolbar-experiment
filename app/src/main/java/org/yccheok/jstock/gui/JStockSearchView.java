@@ -2,20 +2,26 @@ package org.yccheok.jstock.gui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.ResultReceiver;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 
 import org.yccheok.toolbar_experiment.R;
 
+import java.lang.reflect.Method;
+
 public class JStockSearchView extends LinearLayoutCompat {
     private JStockAutoCompleteTextView mSearchSrcTextView;
     private ImageView mCloseButton;
+    static final AutoCompleteTextViewReflector HIDDEN_METHOD_INVOKER = new AutoCompleteTextViewReflector();
 
     public void setText(String text) {
         mSearchSrcTextView.setText(text);
@@ -44,9 +50,54 @@ public class JStockSearchView extends LinearLayoutCompat {
         mCloseButton = (ImageView) findViewById(R.id.search_close_btn);
 
         mCloseButton.setImageDrawable(getResources().getDrawable(android.support.v7.appcompat.R.drawable.abc_ic_clear_mtrl_alpha));
+        mCloseButton.setOnClickListener(mOnClickListener);
 
         mSearchSrcTextView.addTextChangedListener(mTextWatcher);
     }
+
+    private final OnClickListener mOnClickListener = new OnClickListener() {
+
+        public void onClick(View v) {
+            if (v == mCloseButton) {
+                onCloseClicked();
+            }
+        }
+    };
+
+    private void onCloseClicked() {
+        mSearchSrcTextView.setText("");
+        mSearchSrcTextView.requestFocus();
+        setImeVisibility(true);
+    }
+
+    public void setImeVisibility(final boolean visible) {
+        if (visible) {
+            post(mShowImeRunnable);
+        } else {
+            removeCallbacks(mShowImeRunnable);
+            InputMethodManager imm = (InputMethodManager)
+                    getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(getWindowToken(), 0);
+            }
+        }
+    }
+
+    /*
+     * SearchView can be set expanded before the IME is ready to be shown during
+     * initial UI setup. The show operation is asynchronous to account for this.
+     */
+    private Runnable mShowImeRunnable = new Runnable() {
+        public void run() {
+            InputMethodManager imm = (InputMethodManager)
+                    getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            if (imm != null) {
+                HIDDEN_METHOD_INVOKER.showSoftInputUnchecked(imm, JStockSearchView.this, 0);
+            }
+        }
+    };
 
     /**
      * Callback to watch the text field for empty/non-empty
@@ -133,6 +184,83 @@ public class JStockSearchView extends LinearLayoutCompat {
 
         public JStockAutoCompleteTextView(final Context context) {
             super(context);
+        }
+    }
+
+    private static class AutoCompleteTextViewReflector {
+        private Method doBeforeTextChanged, doAfterTextChanged;
+        private Method ensureImeVisible;
+        private Method showSoftInputUnchecked;
+
+        AutoCompleteTextViewReflector() {
+            try {
+                doBeforeTextChanged = AutoCompleteTextView.class
+                        .getDeclaredMethod("doBeforeTextChanged");
+                doBeforeTextChanged.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                // Ah well.
+            }
+            try {
+                doAfterTextChanged = AutoCompleteTextView.class
+                        .getDeclaredMethod("doAfterTextChanged");
+                doAfterTextChanged.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                // Ah well.
+            }
+            try {
+                ensureImeVisible = AutoCompleteTextView.class
+                        .getMethod("ensureImeVisible", boolean.class);
+                ensureImeVisible.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                // Ah well.
+            }
+            try {
+                showSoftInputUnchecked = InputMethodManager.class.getMethod(
+                        "showSoftInputUnchecked", int.class, ResultReceiver.class);
+                showSoftInputUnchecked.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                // Ah well.
+            }
+        }
+
+        void doBeforeTextChanged(AutoCompleteTextView view) {
+            if (doBeforeTextChanged != null) {
+                try {
+                    doBeforeTextChanged.invoke(view);
+                } catch (Exception e) {
+                }
+            }
+        }
+
+        void doAfterTextChanged(AutoCompleteTextView view) {
+            if (doAfterTextChanged != null) {
+                try {
+                    doAfterTextChanged.invoke(view);
+                } catch (Exception e) {
+                }
+            }
+        }
+
+        void ensureImeVisible(AutoCompleteTextView view, boolean visible) {
+            if (ensureImeVisible != null) {
+                try {
+                    ensureImeVisible.invoke(view, visible);
+                } catch (Exception e) {
+                }
+            }
+        }
+
+        void showSoftInputUnchecked(InputMethodManager imm, View view, int flags) {
+            if (showSoftInputUnchecked != null) {
+                try {
+                    showSoftInputUnchecked.invoke(imm, flags, null);
+                    return;
+                } catch (Exception e) {
+                }
+            }
+
+            // Hidden method failed, call public version instead
+            imm.showSoftInput(view, flags);
         }
     }
 }

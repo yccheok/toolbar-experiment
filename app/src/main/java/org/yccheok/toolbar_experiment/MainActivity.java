@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         jStockSearchView.setVisibility(View.VISIBLE);
         jStockSearchView.setText("");
         jStockSearchView.requestTextViewFocus();
+        jStockSearchView.setImeVisibility(true);
 
         animateHamburgerToArrow();
     }
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private void hideSearchView() {
         animateArrowToHamburger();
 
+        jStockSearchView.setImeVisibility(false);
         jStockSearchView.setVisibility(View.GONE);
 
         settingsMenuItem.setVisible(true);
