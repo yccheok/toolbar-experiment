@@ -16,13 +16,37 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AutoCompleteTextView;
 
+import org.yccheok.jstock.gui.JStockSearchView;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private AutoCompleteTextView jStockAutoCompleteTextView;
+    private JStockSearchView jStockSearchView;
+
+    private MenuItem searchMenuItem;
+    private MenuItem settingsMenuItem;
+
     private volatile boolean arrowVisible = false;
+
+    private void displaySearchView() {
+        searchMenuItem.setVisible(false);
+        settingsMenuItem.setVisible(false);
+
+        jStockSearchView.setVisibility(View.VISIBLE);
+
+        animateHamburgerToArrow();
+    }
+
+    private void hideSearchView() {
+        animateArrowToHamburger();
+
+        jStockSearchView.setVisibility(View.GONE);
+
+        settingsMenuItem.setVisible(true);
+        searchMenuItem.setVisible(true);
+    }
 
     private void animateArrowToHamburger() {
         ValueAnimator anim = ValueAnimator.ofFloat(1f, 0f);
@@ -111,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        this.jStockSearchView = (JStockSearchView)toolbar.findViewById(R.id.search_view);
+
         this.drawerLayout = (DrawerLayout)this.findViewById(R.id.drawer_layout);
         this.actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 toolbar, R.string.app_name, R.string.app_name);
@@ -122,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (arrowVisible) {
-                    animateArrowToHamburger();
+                    hideSearchView();
                     return;
                 }
 
@@ -140,10 +166,8 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-
-        View actionView = MenuItemCompat.getActionView(searchMenuItem);
-        this.jStockAutoCompleteTextView = (AutoCompleteTextView)actionView.findViewById(R.id.search);
+        this.searchMenuItem = menu.findItem(R.id.action_search);
+        this.settingsMenuItem = menu.findItem(R.id.action_settings);
 
         return true;
     }
@@ -166,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             animateHamburgerToArrow();
             return true;
         } else if (id == R.id.action_search) {
-            // Merely clear off previous content, and focus and the EditText.
+            displaySearchView();
         }
 
         return super.onOptionsItemSelected(item);

@@ -7,4 +7,12 @@
     android:background="@color/background_material_dark"
     android:elevation="4dp"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+    <view class="org.yccheok.jstock.gui.JStockSearchView"
+        android:id="@+id/search_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="gone"/>
+
+</android.support.v7.widget.Toolbar>
