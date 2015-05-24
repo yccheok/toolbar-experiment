@@ -1,7 +1,11 @@
 package org.yccheok.jstock.gui;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.AutoCompleteTextView;
@@ -38,6 +42,42 @@ public class JStockSearchView extends LinearLayoutCompat {
 
         mSearchSrcTextView = (JStockAutoCompleteTextView) findViewById(R.id.search_src_text);
         mCloseButton = (ImageView) findViewById(R.id.search_close_btn);
+
+        mCloseButton.setImageDrawable(getResources().getDrawable(android.support.v7.appcompat.R.drawable.abc_ic_clear_mtrl_alpha));
+
+        mSearchSrcTextView.addTextChangedListener(mTextWatcher);
+    }
+
+    /**
+     * Callback to watch the text field for empty/non-empty
+     */
+    private TextWatcher mTextWatcher = new TextWatcher() {
+
+        public void beforeTextChanged(CharSequence s, int start, int before, int after) { }
+
+        public void onTextChanged(CharSequence s, int start,
+                                  int before, int after) {
+            JStockSearchView.this.onTextChanged(s);
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    private void onTextChanged(CharSequence newText) {
+        updateCloseButton();
+    }
+
+    private void updateCloseButton() {
+        final boolean hasText = !TextUtils.isEmpty(mSearchSrcTextView.getText());
+        // Should we show the close button? It is not shown if there's no focus,
+        // field is not iconified by default and there is no text in it.
+        final boolean showClose = hasText;
+        mCloseButton.setVisibility(showClose ? VISIBLE : GONE);
+        final Drawable closeButtonImg = mCloseButton.getDrawable();
+        if (closeButtonImg != null){
+            closeButtonImg.setState(hasText ? ENABLED_STATE_SET : EMPTY_STATE_SET);
+        }
     }
 
     @Override
