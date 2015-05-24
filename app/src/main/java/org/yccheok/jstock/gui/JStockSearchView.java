@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 
 public class JStockSearchView extends LinearLayoutCompat {
     private JStockAutoCompleteTextView mSearchSrcTextView;
+    private final View mSearchPlate;
     private ImageView mCloseButton;
     static final AutoCompleteTextViewReflector HIDDEN_METHOD_INVOKER = new AutoCompleteTextViewReflector();
 
@@ -47,8 +48,10 @@ public class JStockSearchView extends LinearLayoutCompat {
         inflater.inflate(R.layout.jstock_search_view, this, true);
 
         mSearchSrcTextView = (JStockAutoCompleteTextView) findViewById(R.id.search_src_text);
+        mSearchPlate = findViewById(R.id.search_plate);
         mCloseButton = (ImageView) findViewById(R.id.search_close_btn);
 
+        mSearchPlate.setBackgroundDrawable(getResources().getDrawable(org.yccheok.toolbar_experiment.R.drawable.abc_textfield_search_material));
         mCloseButton.setImageDrawable(getResources().getDrawable(android.support.v7.appcompat.R.drawable.abc_ic_clear_mtrl_alpha));
         mCloseButton.setOnClickListener(mOnClickListener);
 
