@@ -5,10 +5,22 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 
 import org.yccheok.toolbar_experiment.R;
 
 public class JStockSearchView extends LinearLayoutCompat {
+    private JStockAutoCompleteTextView mSearchSrcTextView;
+    private ImageView mCloseButton;
+
+    public void setText(String text) {
+        mSearchSrcTextView.setText(text);
+    }
+
+    public void requestTextViewFocus() {
+        mSearchSrcTextView.requestFocus();
+    }
+
     public JStockSearchView(Context context) {
         this(context, null);
     }
@@ -23,6 +35,9 @@ public class JStockSearchView extends LinearLayoutCompat {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.jstock_search_view, this, true);
+
+        mSearchSrcTextView = (JStockAutoCompleteTextView) findViewById(R.id.search_src_text);
+        mCloseButton = (ImageView) findViewById(R.id.search_close_btn);
     }
 
     @Override

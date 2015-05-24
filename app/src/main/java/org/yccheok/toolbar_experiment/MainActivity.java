@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
         settingsMenuItem.setVisible(false);
 
         jStockSearchView.setVisibility(View.VISIBLE);
-
+        jStockSearchView.setText("");
+        jStockSearchView.requestTextViewFocus();
+        
         animateHamburgerToArrow();
     }
 
