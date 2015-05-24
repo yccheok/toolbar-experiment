@@ -17,6 +17,7 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:background="@null"
+        android:hint="@string/search_stock"
         android:inputType="text|textAutoComplete|textNoSuggestions"
         android:imeOptions="actionSearch"
         android:dropDownHeight="wrap_content"

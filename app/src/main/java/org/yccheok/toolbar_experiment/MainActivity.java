@@ -2,10 +2,8 @@ package org.yccheok.toolbar_experiment;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AutoCompleteTextView;
 
 import org.yccheok.jstock.gui.JStockSearchView;
 
@@ -37,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         jStockSearchView.setVisibility(View.VISIBLE);
         jStockSearchView.setText("");
         jStockSearchView.requestTextViewFocus();
-        
+
         animateHamburgerToArrow();
     }
 
@@ -162,6 +159,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed () {
+        if (arrowVisible) {
+            hideSearchView();
+            return;
+        }
+        super.onBackPressed();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
