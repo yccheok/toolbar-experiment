@@ -1,12 +1,10 @@
 package org.yccheok.jstock.gui;
 
 import android.content.Context;
-import android.support.v7.internal.widget.TintTypedArray;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 
 import org.yccheok.toolbar_experiment.R;
 
