@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         this.jStockSearchView = (JStockSearchView)toolbar.findViewById(R.id.search_view);
+        this.jStockSearchView.setOnEditTextImeBackListener(new OnEditTextImeBackListener());
 
         this.drawerLayout = (DrawerLayout)this.findViewById(R.id.drawer_layout);
         this.actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -215,5 +216,16 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private class OnEditTextImeBackListener implements JStockSearchView.EditTextImeBackListener {
+
+        @Override
+        public void onImeBack(JStockSearchView.JStockAutoCompleteTextView ctrl, String text) {
+            if (arrowVisible) {
+                hideSearchView();
+                return;
+            }
+        }
     }
 }

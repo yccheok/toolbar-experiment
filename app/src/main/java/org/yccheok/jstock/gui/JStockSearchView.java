@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -184,7 +185,17 @@ public class JStockSearchView extends LinearLayoutCompat {
                 .getDimensionPixelSize(R.dimen.abc_search_view_preferred_width);
     }
 
+    public void setOnEditTextImeBackListener(EditTextImeBackListener listener) {
+        mSearchSrcTextView.setOnEditTextImeBackListener(listener);
+    }
+
+    public interface EditTextImeBackListener {
+        void onImeBack(JStockAutoCompleteTextView ctrl, String text);
+    }
+
     public static class JStockAutoCompleteTextView extends AutoCompleteTextView {
+        private EditTextImeBackListener mOnImeBack;
+
         /**
          * Creates a new instance of JStockAutoComplete
          */
@@ -198,6 +209,19 @@ public class JStockSearchView extends LinearLayoutCompat {
 
         public JStockAutoCompleteTextView(final Context context) {
             super(context);
+        }
+
+        // http://stackoverflow.com/questions/3425932/detecting-when-user-has-dismissed-the-soft-keyboard
+        @Override
+        public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                if (mOnImeBack != null) mOnImeBack.onImeBack(this, this.getText().toString());
+            }
+            return super.dispatchKeyEvent(event);
+        }
+
+        public void setOnEditTextImeBackListener(EditTextImeBackListener listener) {
+            mOnImeBack = listener;
         }
     }
 
