@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import org.yccheok.toolbar_experiment.R;
 
@@ -21,6 +22,7 @@ import java.lang.reflect.Method;
 public class JStockSearchView extends LinearLayoutCompat {
     private JStockAutoCompleteTextView mSearchSrcTextView;
     private ImageView mCloseButton;
+    private ProgressBar mProgressBar;
     static final AutoCompleteTextViewReflector HIDDEN_METHOD_INVOKER = new AutoCompleteTextViewReflector();
 
     public void setText(String text) {
@@ -48,6 +50,7 @@ public class JStockSearchView extends LinearLayoutCompat {
 
         mSearchSrcTextView = (JStockAutoCompleteTextView) findViewById(R.id.search_src_text);
         mCloseButton = (ImageView) findViewById(R.id.search_close_btn);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         mCloseButton.setImageDrawable(getResources().getDrawable(android.support.v7.appcompat.R.drawable.abc_ic_clear_mtrl_alpha));
         mCloseButton.setOnClickListener(mOnClickListener);
@@ -117,10 +120,21 @@ public class JStockSearchView extends LinearLayoutCompat {
 
     private void onTextChanged(CharSequence newText) {
         updateCloseButton();
+        updateProgressBar();
+    }
+
+    private void updateProgressBar() {
+        // TODO: FIXME
+        final boolean hasText = mSearchSrcTextView.getText().length() <= 3;
+        final boolean showProgressBar = !hasText;
+        mProgressBar.setVisibility(showProgressBar ? VISIBLE : INVISIBLE);
     }
 
     private void updateCloseButton() {
-        final boolean hasText = !TextUtils.isEmpty(mSearchSrcTextView.getText());
+        // TODO: FIXME
+        //final boolean hasText = !TextUtils.isEmpty(mSearchSrcTextView.getText());
+        final boolean hasText = !TextUtils.isEmpty(mSearchSrcTextView.getText()) && mSearchSrcTextView.getText().length() <= 3;
+
         // Should we show the close button? It is not shown if there's no focus,
         // field is not iconified by default and there is no text in it.
         final boolean showClose = hasText;
