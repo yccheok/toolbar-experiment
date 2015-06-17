@@ -124,7 +124,7 @@ public class JStockSearchView extends LinearLayoutCompat {
         // Should we show the close button? It is not shown if there's no focus,
         // field is not iconified by default and there is no text in it.
         final boolean showClose = hasText;
-        mCloseButton.setVisibility(showClose ? VISIBLE : GONE);
+        mCloseButton.setVisibility(showClose ? VISIBLE : INVISIBLE);
         final Drawable closeButtonImg = mCloseButton.getDrawable();
         if (closeButtonImg != null){
             closeButtonImg.setState(hasText ? ENABLED_STATE_SET : EMPTY_STATE_SET);
