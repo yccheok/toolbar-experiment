@@ -25,15 +25,28 @@
         android:dropDownVerticalOffset="0dip"
         android:dropDownHorizontalOffset="0dip" />
 
-    <ImageView
-        android:id="@+id/search_close_btn"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingStart="8dip"
-        android:paddingEnd="8dip"
-        android:layout_gravity="center_vertical"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:focusable="true"
-        android:contentDescription="searchview_description_clear" />
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/search_close_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="8dip"
+            android:paddingEnd="8dip"
+            android:layout_gravity="center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:contentDescription="searchview_description_clear" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dip"
+            android:paddingEnd="8dip"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            style="@android:style/Widget.Holo.ProgressBar.Small" />
+    </FrameLayout>
 </LinearLayout>
