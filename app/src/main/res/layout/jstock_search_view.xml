@@ -19,7 +19,7 @@
         android:background="@null"
         android:hint="@string/search_stock"
         android:inputType="text|textAutoComplete|textNoSuggestions"
-        android:imeOptions="actionSearch"
+        android:imeOptions="actionSearch|flagNoExtractUi"
         android:dropDownHeight="wrap_content"
         android:dropDownAnchor="@id/search_edit_frame"
         android:dropDownVerticalOffset="0dip"
