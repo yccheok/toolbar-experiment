@@ -21,7 +21,7 @@
         android:inputType="text|textAutoComplete|textNoSuggestions"
         android:imeOptions="actionSearch|flagNoExtractUi"
         android:dropDownHeight="wrap_content"
-        android:dropDownAnchor="@id/search_edit_frame"
+        android:dropDownAnchor="@id/search_plate"
         android:dropDownVerticalOffset="0dip"
         android:dropDownHorizontalOffset="0dip" />
 
