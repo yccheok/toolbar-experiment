@@ -1,6 +1,11 @@
 package org.yccheok.jstock.gui;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.ResultReceiver;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -56,6 +61,19 @@ public class JStockSearchView extends LinearLayoutCompat {
 
         mCloseButton.setImageDrawable(getResources().getDrawable(android.support.v7.appcompat.R.drawable.abc_ic_clear_mtrl_alpha));
         mCloseButton.setOnClickListener(mOnClickListener);
+
+        // Full screen, but with left-right margins.
+        mSearchSrcTextView.setDropDownWidth(getResources().getDisplayMetrics().widthPixels);
+        
+        int color = Color.parseColor("#ffff0000");
+
+        Drawable drawable = mSearchSrcTextView.getDropDownBackground();
+        drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+
+        // If we use this ColorDrawable, in Android 4.3, the drop down left-right margins will gone.
+        //ColorDrawable drawable = new ColorDrawable(color);
+
+        mSearchSrcTextView.setDropDownBackgroundDrawable(drawable);
 
         mSearchSrcTextView.addTextChangedListener(mTextWatcher);
 
