@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -57,7 +58,15 @@ public class JStockSearchView extends LinearLayoutCompat {
         mCloseButton.setOnClickListener(mOnClickListener);
 
         mSearchSrcTextView.addTextChangedListener(mTextWatcher);
+
+        // Sample data.
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+        mSearchSrcTextView.setAdapter(adapter);
     }
+
+    private static final String[] COUNTRIES = new String[] {
+        "Belgium", "France", "Frances", "Italy", "Germany", "Spain"
+    };
 
     private final OnClickListener mOnClickListener = new OnClickListener() {
 
@@ -121,20 +130,10 @@ public class JStockSearchView extends LinearLayoutCompat {
 
     private void onTextChanged(CharSequence newText) {
         updateCloseButton();
-        updateProgressBar();
-    }
-
-    private void updateProgressBar() {
-        // TODO: FIXME
-        final boolean hasText = mSearchSrcTextView.getText().length() <= 3;
-        final boolean showProgressBar = !hasText;
-        mProgressBar.setVisibility(showProgressBar ? VISIBLE : INVISIBLE);
     }
 
     private void updateCloseButton() {
-        // TODO: FIXME
-        //final boolean hasText = !TextUtils.isEmpty(mSearchSrcTextView.getText());
-        final boolean hasText = !TextUtils.isEmpty(mSearchSrcTextView.getText()) && mSearchSrcTextView.getText().length() <= 3;
+        final boolean hasText = !TextUtils.isEmpty(mSearchSrcTextView.getText());
 
         // Should we show the close button? It is not shown if there's no focus,
         // field is not iconified by default and there is no text in it.

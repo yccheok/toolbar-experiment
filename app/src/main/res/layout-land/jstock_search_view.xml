@@ -50,7 +50,7 @@
             android:paddingEnd="16dip"
             android:paddingRight="16dip"
             android:layout_gravity="center"
-            android:visibility="visible"
+            android:visibility="invisible"
             style="@android:style/Widget.Holo.ProgressBar.Small" />
     </FrameLayout>
 </LinearLayout>
